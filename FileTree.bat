@@ -9,7 +9,7 @@ echo [작업 경로: %cd%]
 tree /f /a > "%filename%"
 
 echo.
-echo 저장이 완료되었습니다!
+echo 저장이 완료되었습니다.
 echo 저장 위치: %filename%
 echo.
 
