@@ -10,14 +10,7 @@ set "OUTFILE=%USERPROFILE%\Desktop\%PROJNAME%.txt"
 
 if exist "%OUTFILE%" del "%OUTFILE%"
 
-echo 프로젝트: %PROJNAME% > "%OUTFILE%"
-echo 날짜: %DATE% %TIME% >> "%OUTFILE%"
-echo. >> "%OUTFILE%"
-echo [전체 트리 구조] >> "%OUTFILE%"
-tree "%WORKDIR%" /f /a >> "%OUTFILE%"
-
 for /f "usebackq delims=" %%F in (`dir /s /b /a-d ^| findstr /i /v /r "%IGNORE_LIST: = %"` ) do (
-    set "FILEPATH=%%F"
     set "RELPATH=%%F"
     set "RELPATH=!RELPATH:%WORKDIR%\=!"
     
@@ -37,8 +30,6 @@ for /f "usebackq delims=" %%F in (`dir /s /b /a-d ^| findstr /i /v /r "%IGNORE_L
         echo. >> "%OUTFILE%"
     )
 )
-
-popd
 
 echo.
 echo 작업 완료: %OUTFILE%
