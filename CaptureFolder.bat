@@ -1,29 +1,22 @@
 @echo off
+chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-:: [¼³Á¤] Á¦¿ÜÇÒ Å°¿öµå
 set "IGNORE_LIST="
 
-:: [ÃÊ±âÈ­] ÇÁ·ÎÁ§Æ®¸í ±×´ë·Î ÆÄÀÏ »ý¼º
 set "WORKDIR=%CD%"
 for %%I in ("%WORKDIR%") do set "PROJNAME=%%~nxI"
 set "OUTFILE=%USERPROFILE%\Desktop\%PROJNAME%.txt"
 
 if exist "%OUTFILE%" del "%OUTFILE%"
 
-:: [±¸Á¶] Æ®¸® ÀüÃ¼ Ãâ·Â
-echo ÇÁ·ÎÁ§Æ®: %PROJNAME% > "%OUTFILE%"
-echo ³¯Â¥: %DATE% %TIME% >> "%OUTFILE%"
+echo í”„ë¡œì íŠ¸: %PROJNAME% > "%OUTFILE%"
+echo ë‚ ì§œ: %DATE% %TIME% >> "%OUTFILE%"
 echo. >> "%OUTFILE%"
-echo [ÀüÃ¼ Æ®¸® ±¸Á¶] >> "%OUTFILE%"
+echo [ì „ì²´ íŠ¸ë¦¬ êµ¬ì¡°] >> "%OUTFILE%"
 tree "%WORKDIR%" /f /a >> "%OUTFILE%"
-echo. >> "%OUTFILE%"
-echo ------------------------------------------------------------ >> "%OUTFILE%"
-echo. >> "%OUTFILE%"
 
-:: [º´ÇÕ] ÆÄÀÏ ³»¿ë ±â·Ï ½ÃÀÛ
-pushd "%WORKDIR%"
-for /r %%F in (*) do (
+for /f "usebackq delims=" %%F in (`dir /s /b /a-d ^| findstr /i /v /r "%IGNORE_LIST: = %"` ) do (
     set "FILEPATH=%%F"
     set "RELPATH=%%F"
     set "RELPATH=!RELPATH:%WORKDIR%\=!"
@@ -31,27 +24,23 @@ for /r %%F in (*) do (
     set "SKIP="
     if "%%~nxF"=="%~nx0" set "SKIP=1"
     if "%%~nxF"=="%PROJNAME%.txt" set "SKIP=1"
-    
-    for %%P in (%IGNORE_LIST%) do (
-        echo "!FILEPATH!" | findstr /i /c:"%%P" >nul
-        if !errorlevel! equ 0 set "SKIP=1"
-    )
 
     if not defined SKIP (
-        echo [±â·Ï Áß] !RELPATH!
+        echo [ê¸°ë¡ ì¤‘] !RELPATH!
         echo ------------------------------------------------------------ >> "%OUTFILE%"
-        echo ÆÄÀÏ¸í: !RELPATH! >> "%OUTFILE%"
+        echo íŒŒì¼ëª…: !RELPATH! >> "%OUTFILE%"
         echo ------------------------------------------------------------ >> "%OUTFILE%"
         
         findstr "^" "%%F" >> "%OUTFILE%" 2>nul
-        
+
         echo. >> "%OUTFILE%"
         echo. >> "%OUTFILE%"
     )
 )
+
 popd
 
 echo.
-echo ÀÛ¾÷ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù. ¹ÙÅÁÈ­¸éÀ» È®ÀÎÇÏ¼¼¿ä.
+echo ìž‘ì—… ì™„ë£Œ: %OUTFILE%
 start "" notepad.exe "%OUTFILE%"
 pause
