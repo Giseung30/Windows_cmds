@@ -3,6 +3,7 @@ chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 set "IGNORE_LIST="
+:: [설정] 무시할 폴더나 파일명을 띄어쓰기로 나열하세요.
 
 set "WORKDIR=%CD%"
 for %%I in ("%WORKDIR%") do set "PROJNAME=%%~nxI"
